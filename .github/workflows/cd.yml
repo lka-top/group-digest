@@ -1,0 +1,57 @@
+name: CD (reserved)
+run-name: CD preflight for ${{ inputs.environment }} by @${{ github.actor }}
+
+# This workflow is intentionally manual and does not deploy anything yet.
+# The branch or tag to validate is selected from GitHub's "Run workflow" UI.
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Reserved deployment environment
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    name: Validate release candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Check out selected revision
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck and build
+        run: npm run build
+
+      - name: Deployment placeholder
+        run: |
+          echo "Release candidate validated: ${GITHUB_SHA}"
+          echo "No image was published and no server was changed."
+
+  # Future deployment job:
+  # 1. Build and push an immutable application image to GHCR.
+  # 2. Back up the SQLite database on the target host.
+  # 3. Update only the application service; keep NapCat state untouched.
+  # 4. Verify /api/health and roll back to the previous image on failure.

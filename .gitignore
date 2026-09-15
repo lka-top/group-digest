@@ -1,0 +1,56 @@
+node_modules/
+node_modules.*
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Project uses npm; do not commit lockfiles from other package managers.
+pnpm-lock.yaml
+pnpm-workspace.yaml
+yarn.lock
+
+# Local-only adapters, seed data, fixtures, and generated test content.
+server/adapters/mock.ts
+server/seed.ts
+fixtures/generated/
+test-data/
+
+# Runtime databases, exports, backups, and logs may contain chat content.
+data/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.log
+
+# Local credentials and environment-specific configuration.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc.local
+
+# Local editor and agent state.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.codex/
+.codex-log/
+
+*.tsbuildinfo
+vite.config.ts.timestamp-*.mjs
+vite.config.js
+vite.config.d.ts
+server/**/*.d.ts
+server/**/*.js
+
+# NapCat contains QQ login state, device data, tokens, logs, and message caches.
+deploy/napcat/data/
+deploy/napcat/.env
